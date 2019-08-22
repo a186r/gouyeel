@@ -1,0 +1,15 @@
+{
+    "files.autoSave": "off",
+    "go.buildOnSave": true,
+    "go.lintOnSave": true,
+    "go.vetOnSave": true,
+    "go.buildFlags": [],
+    "go.lintFlags": [],
+    "go.vetFlags": [],
+    "go.coverOnSave": false,
+    "go.useCodeSnippetsOnFunctionSuggest": false,
+    "go.formatOnSave": true,
+    "go.formatTool": "goreturns",
+    "go.goroot": "/usr/local/go",// 你的Goroot
+    "go.gopath": "/home/a186r/dev/golang",
+  }

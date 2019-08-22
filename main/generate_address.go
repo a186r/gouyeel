@@ -3,26 +3,27 @@ package main
 import (
 	"crypto/ecdsa"
 	"fmt"
+	"log"
+
 	"github.com/ethereum/go-ethereum/common/hexutil"
 	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/karalabe/go-ethereum/crypto/sha3"
-	"log"
 )
 
 func main() {
 	privateKey, err := crypto.GenerateKey()
 
-	if err != nil{
+	if err != nil {
 		log.Fatal(err)
 	}
 
-//	使用FromECDSA将其转换为字节
+	//	使用FromECDSA将其转换为字节
 	privateKeyBytes := crypto.FromECDSA(privateKey)
 
-//	十六进制编码之后删除0x
+	//	十六进制编码之后删除0x
 	fmt.Println(hexutil.Encode(privateKeyBytes)[2:])
 
-//	公钥是从私钥派生的
+	//	公钥是从私钥派生的
 	publicKey := privateKey.Public()
 	publicKeyECDSA, ok := publicKey.(*ecdsa.PublicKey)
 
@@ -34,7 +35,7 @@ func main() {
 	publicKeyBytes := crypto.FromECDSAPub(publicKeyECDSA)
 	fmt.Println(hexutil.Encode(publicKeyBytes)[4:])
 
-//	通过publicKey生成地址
+	//	通过publicKey生成地址
 	address := crypto.PubkeyToAddress(*publicKeyECDSA).Hex()
 	fmt.Println(address)
 
