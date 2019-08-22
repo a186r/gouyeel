@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"github.com/ethereum/go-ethereum/common/hexutil"
 	"github.com/ethereum/go-ethereum/crypto"
-	"github.com/ethereum/go-ethereum/crypto/sha3"
+	"github.com/karalabe/go-ethereum/crypto/sha3"
 	"log"
 )
 
@@ -38,5 +38,10 @@ func main() {
 	address := crypto.PubkeyToAddress(*publicKeyECDSA).Hex()
 	fmt.Println(address)
 
-	hash := sha3.
+	// 取最后40个字符(20个字节)并且加0x作为前缀
+	// 以下是使用go-ethereum的crypto/sha3 Keccak256函数手动完成的方法。
+	hash := sha3.NewKeccak256()
+	hash.Write(publicKeyBytes[1:])
+	fmt.Println(hexutil.Encode(hash.Sum(nil)[12:]))
+
 }
