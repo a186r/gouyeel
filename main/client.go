@@ -7,7 +7,7 @@ import (
 )
 
 func main() {
-	client, err := ethclient.Dial("http://localhost:8545")
+	client, err := ethclient.Dial("https://ropsten.infura.io")
 
 	if err != nil{
 		log.Fatal(err)

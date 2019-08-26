@@ -14,13 +14,13 @@ import (
 
 func main() {
 //	连接到客户端
-	client, err := ethclient.Dial("http://localhost:8545")
+	client, err := ethclient.Dial("https://ropsten.infura.io")
 	if err != nil{
 		log.Fatal(err)
 	}
 
 //	导入私钥
-	privateKey, err := crypto.HexToECDSA("4b3083dec275a833bdec039205cc4af69607cd5eca1a52e8423bc5a4d3c8eb2f")
+	privateKey, err := crypto.HexToECDSA("9bfea7dc5c79f23a073e833ae80ff108e62a2efdc7aeb7f856bc6f1125b99253")
 	if err != nil{
 		log.Fatal(err)
 	}
@@ -44,7 +44,7 @@ func main() {
 	if err != nil{
 		log.Fatal(err)
 	}
-	toAddress := common.HexToAddress("0x2D022555f3A916761141db09622d93F2459B1DaC")
+	toAddress := common.HexToAddress("0x063B1c8Dd824e050f59294D13616F57aE11Ae411")
 //	数据data
 	var data []byte
 //	组装交易数据
