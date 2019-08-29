@@ -19,11 +19,11 @@ func main() {
 
 // 	获取数据的keccak256
 	data := []byte("hello")
-	hash := crypto.Keccak256(data)
-	fmt.Println("hash: ", hexutil.Encode(hash))
+	hash := crypto.Keccak256Hash(data)
+	fmt.Println("hash: ", hash.Hex())
 
 // 	使用私钥签名hash，得到签名
-	signature, err := crypto.Sign(hash, private)
+	signature, err := crypto.Sign(hash.Bytes(), private)
 	if err != nil{
 		log.Fatal(err)
 	}
