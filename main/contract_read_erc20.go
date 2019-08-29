@@ -1,101 +1,57 @@
 package main
 
 import (
-	"context"
+	token "../contracts/erc20"
 	"fmt"
-	"github.com/ethereum/go-ethereum"
-	"github.com/ethereum/go-ethereum/accounts/abi"
+	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/ethereum/go-ethereum/ethclient"
-	token "gouyeel/contracts/eerc20"
 	"log"
+	"math"
 	"math/big"
-	"strings"
 )
 
-type LogTransfer struct {
-	Form 	common.Address
-	To 		common.Address
-	Tokens 	*big.Int
-}
-
-type LogApproval struct {
-	TokenOwner 	common.Address
-	Spender		common.Address
-	Tokens 		*big.Int
-}
-
 func main() {
-	client, err := ethclient.Dial("https://mainnet.infura.io")
+	client, err := ethclient.Dial("https://ropsten.infura.io")
 	if err != nil{
 		log.Fatal(err)
 	}
 
-//	0x token address
-	contractAddress := common.HexToAddress("0xe41d2489571d322189246dafa5ebde1f4699f498")
-	query := ethereum.FilterQuery{
-		FromBlock: big.NewInt(8439000),
-		ToBlock:   big.NewInt(8439520),
-		Addresses: []common.Address{
-			contractAddress,
-		},
-	}
-
-	logs, err := client.FilterLogs(context.Background(), query)
+	tokenAddress := common.HexToAddress("0x8c5d6983373aaca3825db38d5dd5808af55f30b5")
+	instance, err := token.NewToken(tokenAddress, client)
 	if err != nil{
 		log.Fatal(err)
 	}
 
-	contractAbi, err := abi.JSON(strings.NewReader(string(token.TokenABI)))
+	address := common.HexToAddress("0x590aD63D60b57082B4eBc246C1Fa4423b0695f74")
+	balance, err := instance.BalanceOf(&bind.CallOpts{}, address)
 	if err != nil{
 		log.Fatal(err)
 	}
 
-	logTransferSig := []byte("Transfer(address,address,uint256)")
-	LogApprovalSig := []byte("Approval(address,address,uint256)")
-	logTransferSigHash := crypto.Keccak256Hash(logTransferSig)
-	LogApprovalSigHash := crypto.Keccak256Hash(LogApprovalSig)
+	fmt.Printf("wei: %s\n", balance)
 
-	for _, vLog := range logs{
-		fmt.Printf("Log Block Number: %d\n", vLog.BlockNumber)
-		fmt.Printf("Log Index: %d\n", vLog.Index)
-
-		switch vLog.Topics[0].Hex() {
-		case logTransferSigHash.Hex():
-			fmt.Printf("Log Name: Transfer\n")
-
-			var transferEvent LogTransfer
-
-			err := contractAbi.Unpack(&transferEvent, "Transfer", vLog.Data)
-			if err != nil{
-				log.Fatal(err)
-			}
-
-			transferEvent.Form = common.HexToAddress(vLog.Topics[1].Hex())
-			transferEvent.To = common.HexToAddress(vLog.Topics[2].Hex())
-
-			fmt.Printf("From: %s\n", transferEvent.Form.Hex())
-			fmt.Printf("To: %s\n", transferEvent.To.Hex())
-			fmt.Printf("Tokens: %s\n", transferEvent.Tokens.String())
-		case LogApprovalSigHash.Hex():
-			fmt.Printf("Log Name: Approval\n")
-
-			var approvalEvent LogApproval
-
-			err := contractAbi.Unpack(&approvalEvent, "Approval", vLog.Data)
-			if err != nil{
-				log.Fatal(err)
-			}
-
-			approvalEvent.TokenOwner = common.HexToAddress(vLog.Topics[1].Hex())
-			approvalEvent.Spender = common.HexToAddress(vLog.Topics[2].Hex())
-
-			fmt.Printf("TokenOwner: %s\n", approvalEvent.TokenOwner.Hex())
-			fmt.Printf("Spender: %s\n", approvalEvent.Spender.Hex())
-			fmt.Printf("Tokens: %s\n", approvalEvent.Tokens.String())
-		}
-		fmt.Printf("\n\n")
+	name, err := instance.Name(&bind.CallOpts{})
+	if err != nil{
+		log.Fatal(err)
 	}
+	fmt.Printf("name: %s\n", name)
 
+	symbol, err := instance.Symbol(&bind.CallOpts{})
+	if err != nil{
+		log.Fatal(err)
+	}
+	fmt.Printf("symbol: %s\n", symbol)
+
+	decimals, err := instance.Decimals(&bind.CallOpts{})
+	if err != nil{
+		log.Fatal(err)
+	}
+	fmt.Printf("decimals: %v\n", decimals)
+
+// 	将余额转换为10进制格式
+	fbal := new(big.Float)
+	fbal.SetString(balance.String())
+	value := new(big.Float).Quo(fbal, big.NewFloat(math.Pow10(int(decimals))))
+	fmt.Printf("balance: %f", value)
 }

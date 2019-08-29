@@ -1,7 +1,7 @@
 package main
 
 import(
-	store "../contracts"
+	store "../contracts/Store"
 	"context"
 	"crypto/ecdsa"
 	"fmt"
