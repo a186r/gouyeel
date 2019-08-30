@@ -32,12 +32,12 @@ func main() {
 		fmt.Println(tx.GasPrice().Uint64())
 		fmt.Println(tx.Nonce())
 
-		chainId, err := client.NetworkID(context.Background())
+		chainID, err := client.NetworkID(context.Background())
 		if err != nil{
 			log.Fatal(err)
 		}
 
-		if msg, err := tx.AsMessage(types.NewEIP155Signer(chainId)); err != nil{
+		if msg, err := tx.AsMessage(types.NewEIP155Signer(chainID)); err != nil{
 			fmt.Println(msg.From().Hex())
 		}
 

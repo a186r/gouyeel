@@ -11,5 +11,5 @@
     "go.formatOnSave": true,
     "go.formatTool": "goreturns",
     "go.goroot": "/usr/local/go",// 你的Goroot
-    "go.gopath": "/home/a186r/dev/golang",
+    "go.gopath": "/home/aewalle/go", //GOPATH
   }

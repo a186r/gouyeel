@@ -5,7 +5,7 @@
 package main
 
 import (
-	store "../contracts"
+	store "../contracts/Store"
 	"fmt"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/ethclient"

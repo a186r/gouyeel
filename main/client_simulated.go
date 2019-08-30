@@ -59,8 +59,8 @@ func main() {
 	tx := types.NewTransaction(nonce, toAddress, value, gasLimit, gasPrice, data)
 
 // 	签名交易
-	chainId := big.NewInt(1337)
-	signedTx, err := types.SignTx(tx, types.NewEIP155Signer(chainId), privateKey)
+	chainID := big.NewInt(1337)
+	signedTx, err := types.SignTx(tx, types.NewEIP155Signer(chainID), privateKey)
 	if err != nil{
 		log.Fatal(err)
 	}

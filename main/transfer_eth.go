@@ -53,12 +53,12 @@ func main() {
 	//  下一步是使用发件人的私钥对事务进行签名。
 	//  为此，我们调用SignTx方法，该方法接受一个未签名的事务和我们之前构造的私钥。
 	//  SignTx方法需要EIP155签名者，这个也需要我们先从客户端拿到链ID。
-	chainId, err := client.NetworkID(context.Background())
+	chainID, err := client.NetworkID(context.Background())
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	signedTx, err := types.SignTx(tx, types.NewEIP155Signer(chainId), privateKey)
+	signedTx, err := types.SignTx(tx, types.NewEIP155Signer(chainID), privateKey)
 	if err != nil {
 		log.Fatal(err)
 	}
